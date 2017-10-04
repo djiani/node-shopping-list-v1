@@ -31,6 +31,7 @@ app.get('/shopping-list', (req, res) => {
   res.json(ShoppingList.get());
 });
 
+
 app.post('/shopping-list',jsonParser, (req, res)=>{
   //ensure name and budget are in the request body
   const requiredField = ['name', 'budget'];
@@ -45,6 +46,19 @@ app.post('/shopping-list',jsonParser, (req, res)=>{
     res.status(201).json(item);
 
   }
+});
+
+
+app.delete('/shopping-list/:id', (req, res)=>{
+  ShoppingList.delete(req.params.id);
+  console.log(`Delete shopping list item ${req.params.id}`);
+  res.status(204).end();
+})
+
+//when the root of this router is called with GET, return
+// all current Recipes list
+app.get('/recipes', (req, res) =>{
+  res.json(Recipes.get());
 });
 
 app.post('/recipes', jsonParser, (req, res)=>{
@@ -62,13 +76,11 @@ app.post('/recipes', jsonParser, (req, res)=>{
   }
 });
 
-
-//when the root of this router is called with GET, return
-// all current Recipes list
-app.get('/recipes', (req, res) =>{
-  res.json(Recipes.get());
-});
-
+app.delete('/recipes/:id', (req, res)=>{
+  Recipes.delete(req.params.id);
+  console.log(`Delete shopping list item ${req.params.id}`);
+  res.status(204).end();
+})
 
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
