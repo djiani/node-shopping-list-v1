@@ -55,6 +55,33 @@ app.delete('/shopping-list/:id', (req, res)=>{
   res.status(204).end();
 })
 
+app.put('/shopping-list/:id', jsonParser, (req, res)=>{
+  const requiredFields = ['name', 'budget', 'id'];
+  for(let i =0; i < requiredFields.length; i++){
+    const field = requiredFields[i];
+    if(!(field in req.body)){
+      const message = `Missing  ${field} in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  //how do you get the params here: req.params.id????
+  if(req.params.id != req.body.id){    
+    console.log('here');
+    const message = `Request path id (${req.params.id}) and request body id (${req.body.id}) must match`;
+    console.error(message);
+    return res.status(400).send(message);
+  }
+  console.log(`Updating shopping list item \`${req.params.id}\``);
+  ShoppingList.update({
+    id: req.params.id,
+    name: req.body.name,
+    budget: req.body.budget
+  });
+  res.status(204).end();
+
+})
+
 //when the root of this router is called with GET, return
 // all current Recipes list
 app.get('/recipes', (req, res) =>{
@@ -80,6 +107,33 @@ app.delete('/recipes/:id', (req, res)=>{
   Recipes.delete(req.params.id);
   console.log(`Delete shopping list item ${req.params.id}`);
   res.status(204).end();
+})
+
+app.put('/recipes/:id', jsonParser, (req, res)=>{
+  const requiredFields = ['name', 'ingredients', 'id'];
+  for(let i =0; i < requiredFields.length; i++){
+    const field = requiredFields[i];
+    if(!(field in req.body)){
+      const message = `Missing  ${field} in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  //how do you get the params here: req.params.id????
+  if(req.params.id != req.body.id){    
+    console.log('here');
+    const message = `Request path id (${req.params.id}) and request body id (${req.body.id}) must match`;
+    console.error(message);
+    return res.status(400).send(message);
+  }
+  console.log(`Updating shopping list item \`${req.params.id}\``);
+  Recipes.update({
+    id: req.params.id,
+    name: req.body.name,
+    ingredients: req.body.ingredients
+  });
+  res.status(204).end();
+
 })
 
 app.listen(process.env.PORT || 8080, () => {
